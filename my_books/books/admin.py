@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.utils.safestring import mark_safe
+
 from .models import *
 from django_summernote.admin import SummernoteModelAdmin
 
@@ -7,13 +9,19 @@ from django_summernote.admin import SummernoteModelAdmin
 
 @admin.register(Book)
 class BookAdmin(SummernoteModelAdmin):
+    list_per_page = 3
     summernote_fields = ('description',)
-    list_display = ['title', 'author', 'photo', 'description', 'status', 'rating', 'published']
+    list_display = ['title', 'author', 'get_html_photo', 'status', 'rating', 'published']
     list_filter = ['status', 'author', 'genre']
     search_fields = ['title', 'author']
     prepopulated_fields = {'slug': ('title',)}
     date_hierarchy = 'published'
     ordering = ['-published']
+    list_editable = ('status', 'rating')
+
+    def get_html_photo(self, object):
+        if object.photo:
+            return mark_safe(f"<img src='{object.photo.url}' width=100>")
 
 
 @admin.register(Comment)
