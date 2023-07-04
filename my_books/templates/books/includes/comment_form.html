@@ -1,0 +1,12 @@
+<h2>Добавить новый комментарий</h2>
+<form action="{% url 'books:book_comment' book.id %}" method="post">
+  {% for field in form %}
+   <div><br>
+      {{ field.errors }}
+      {{ field.label_tag }}<br>
+       {{ field }}
+   </div>
+    {% endfor %}
+    {% csrf_token %}
+    <p><input type="submit" value="Add comment"></p>
+</form>

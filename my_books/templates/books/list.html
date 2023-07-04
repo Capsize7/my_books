@@ -1,0 +1,21 @@
+{% extends "books/base.html" %}
+{% load books_tags %}
+{% block title %}Мои книги{% endblock %}
+
+{% block content %}
+<h1>Мои книги</h1>
+    {% for book in books %}
+    <h2>
+        <a href="{{book.get_absolute_url}}">{{ book.title }}</a>
+    </h2>
+        <p class="date">
+            {{ book.published }}
+        </p>
+    <div>
+        <p><img src="{{book.photo.url}}" width="40%"></p>
+        <p style="align: right">{{book.written}}</p>
+    </div>
+    {{book.description|markdown|truncatewords_html:30}}
+    {% endfor %}
+    {% include "books/pagination.html" with page=books %}
+{% endblock %}

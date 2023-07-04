@@ -53,7 +53,7 @@ class Book(models.Model):
         return f'{self.title} - {self.author}'
 
     def get_absolute_url(self):
-        return reverse('books:book_detail', args=[self.slug, ])
+        return reverse('books:book_detail', args=[self.slug])
 
 
 class Comment(models.Model):
@@ -72,4 +72,4 @@ class Comment(models.Model):
         verbose_name_plural = 'Комментарии'
 
     def __str__(self):
-        return f'Comment by {self.name} on {self.book}'
+        return f'Комментарий от {self.name} на книгу - {self.book}'

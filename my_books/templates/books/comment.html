@@ -1,0 +1,12 @@
+{% extends "books/base.html" %}
+
+{% block title %}Добавить комментарий{% endblock %}
+
+{% block content %}
+    {% if comment %}
+        <h2>Ваш комментарий был успешно добавлен.</h2>
+        <p><a href="{{ book.get_absolute_url }}">Вернуться к книге</a></p>
+    {% else %}
+        {% include "blog/post/includes/comment_form.html" %}
+    {% endif %}
+{% endblock %}
