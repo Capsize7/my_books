@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'books.apps.BooksConfig',
     'django.contrib.postgres',
     'django_summernote',
+    'django_bootstrap5',
 
 ]
 
@@ -57,7 +58,7 @@ ROOT_URLCONF = 'my_books.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -124,3 +125,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
+
+EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_HOST_USER = 'kislinskii1999@mail.ru'
+EMAIL_HOST_PASSWORD = 'MUbjJVej5dg1KeP0eRL4'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
