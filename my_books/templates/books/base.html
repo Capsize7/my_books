@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load books_tags %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,7 +13,18 @@
 </div>
 <div id="sidebar">
     <h2>Мои книги</h2>
-    <p>Это мои книги.</p>
+    <p>На данный момент я прочитал {% total_books %} книг</p>
+    <h3>Лучшие прочитанные книги: </h3>
+    {% show_best_books 3 %}
+    <h3>Самые обсуждаемые книги: </h3>
+      {% get_most_commented_books as most_commented_books %}
+      <ul>
+         {% for book in most_commented_books %}
+         <li>
+            <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
+         </li>
+         {% endfor %}
+      </ul>
 </div>
 </body>
 </html>

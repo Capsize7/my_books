@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.postgres',
     'django_summernote',
     'django_bootstrap5',
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
 
 ]
 
@@ -131,3 +133,5 @@ EMAIL_HOST_USER = 'kislinskii1999@mail.ru'
 EMAIL_HOST_PASSWORD = 'MUbjJVej5dg1KeP0eRL4'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+SUMMERNOTE_THEME = 'bs5'

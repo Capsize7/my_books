@@ -1,0 +1,7 @@
+<ul>
+    {% for book in best_books %}
+        <li>
+            <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
+        </li>
+    {% endfor %}
+</ul>

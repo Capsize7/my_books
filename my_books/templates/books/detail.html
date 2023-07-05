@@ -14,9 +14,17 @@
             Поделиться книгой
         </a>
     </p>
+    <h2>Похожие книги: </h2>
+    {% for book in similar_books %}
+        <p>
+            <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
+        </p>
+    {% empty %}
+        К сожалению, пока нет схожих книг
+    {% endfor %}
     {% with comments.count as total_comments %}
         <h2>
-            {{ total_comments }} Комментариев
+            Всего комментариев: {{ total_comments }}
         </h2>
     {% endwith %}
     {% for comment in comments %}
@@ -28,7 +36,7 @@
             {{ comment.body|markdown }}
         </div>
     {% empty %}
-        <p>Пока еще нет комментариев.</p>
+        <p>К сожалению, нет ни одного комментария</p>
     {% endfor %}
     {% include "books/includes/comment_form.html" %}
 {% endblock %}

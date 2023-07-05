@@ -5,6 +5,7 @@ from django.views.decorators.http import require_POST
 from taggit.models import Tag
 from .forms import EmailPostForm, CommentForm
 from .models import *
+from django.db.models import Count
 
 
 # Create your views here.
@@ -13,7 +14,7 @@ def books_list(request, tag_slug=None):
     tag = None
     if tag_slug:
         tag = get_object_or_404(Tag, slug=tag_slug)
-        book_list = book_list.filter(tags__in=tag)
+        book_list = book_list.filter(tags__in=[tag])
 
     paginator = Paginator(book_list, 3)
     page_number = request.GET.get('page', 1)
@@ -26,8 +27,13 @@ def book_detail(request, book):
                              status=Book.Status.READ)
     comments = book.comments.all()
     form = CommentForm()
+    book_tags_ids = book.tags.values_list('id', flat=True)
+    similar_books = Book.read.filter(tags__in=book_tags_ids) \
+        .exclude(id=book.id)
+    similar_books = similar_books.annotate(same_tags=Count('tags')) \
+                        .order_by('-same_tags', '-published')[:4]
     return render(request, 'books/detail.html',
-                  {'book': book, 'comments': comments, 'form': form})
+                  {'book': book, 'comments': comments, 'form': form, 'similar_books': similar_books})
 
 
 def book_share(request, book_id):
