@@ -4,10 +4,24 @@
 
 {% block content %}
 <h1>Мои книги</h1>
+    {% if tag %}
+        <h2>Книги, помеченные тегом: "{{ tag.name }}"</h2>
+    {% endif %}
     {% for book in books %}
     <h2>
         <a href="{{book.get_absolute_url}}">{{ book.title }}</a>
     </h2>
+    <p class="tags">
+            Tags:
+            {% for tag in book.tags.all %}
+                <a href="{% url 'books:book_list_by_tag' tag.slug %}">
+                    {{ tag.name }}
+                </a>
+                {% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        <p class="date">
+            Published {{ post.publish }} by {{ post.author }}
+        </p>
         <p class="date">
             {{ book.published }}
         </p>
