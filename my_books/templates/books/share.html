@@ -1,25 +1,26 @@
 {% extends "books/base.html" %}
 
-{% block title %}Поделиться книгой{% endblock %}
+{% block title %}Share a post{% endblock %}
 
 {% block content %}
     {% if sent %}
-        <h1>E-mail успешно отправлен</h1>
+        <h1>E-mail был успешно отправлен</h1>
         <p>
-            "{{ book.title }}" была успешно отправлена {{ form.cleaned_data.to }}.
+            Книга "{{ book.title }}" была успешно отправлена
+            нв адрес - {{ form.cleaned_data.to }}
         </p>
     {% else %}
-        <h1>Share "{{ book.title }}" через E-mail</h1>
+    <h1 align="center">Поделиться книгой <i>"{{ book.title }}"</i></h1><br>
         <form method="post">
-    {% for field in form %}
-    <div><br>
-      {{ field.errors }}
-      {{ field.label_tag }}<br>
-       {{ field }}
-   </div>
-{% endfor %}
+             {% for field in form %}
+                 <div>
+                    {{ field.errors }}
+                    {{ field.label_tag }}
+                     {{ field }}
+                </div>
+            {% endfor %}
             {% csrf_token %}
-            <input type="submit" value="Send e-mail">
+            <input type="submit" value="Отправить" class="btn btn-primary mb-3 btn-lg">
         </form>
     {% endif %}
 {% endblock %}

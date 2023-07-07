@@ -1,42 +1,55 @@
 {% extends "books/base.html" %}
 {% load books_tags %}
-{% block title %}{{ book.title }}{% endblock %}
-{% block content %}
-    <h1>{{ book.title }}</h1>
-    <p class="date">
-        Published {{ book.published }}
-    </p>
-    <div><img src="{{book.photo.url}}" width="50%"></div>
 
-    {{ book.description|markdown}}
-    <p>
-        <a href="{% url 'books:book_share' book.id %}">
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block content %}
+    <h1 class="fw-bolder text-center ">{{ book.title }}</h1>
+    <p class="text-muted fst-italic mb-2 text-end">
+        Добавлена {{ book.published }}
+    </p>
+    <div>
+        <div><img src="{{book.photo.url}}" width="50%"></div>
+        <span>Автор: {{book.author}}</span><br>
+            <span>Год написания: {{book.written}}</span>
+    </div>
+    <div>
+        {{ book.description|markdown }}
+    </div>
+    <div class="d-flex justify-content-end">
+        <a class="btn btn-primary float-left" href="{% url 'books:book_share' book.id %}">
             Поделиться книгой
         </a>
-    </p>
-    <h2>Похожие книги: </h2>
-    {% for book in similar_books %}
-        <p>
-            <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
-        </p>
-    {% empty %}
-        К сожалению, пока нет схожих книг
-    {% endfor %}
-    {% with comments.count as total_comments %}
-        <h2>
-            Всего комментариев: {{ total_comments }}
-        </h2>
-    {% endwith %}
-    {% for comment in comments %}
-        <div class="comment">
-            <p class="info">
-                Комментарий {{ forloop.counter }} от {{ comment.name }}
-                {{ comment.created }}
-            </p>
-            {{ comment.body|markdown }}
+    </div>
+    {% if similar_books %}
+        <div class="row card mt-2">
+            <h2>Похожие книги</h2>
+            {% for book in similar_books %}
+                <p>
+                    <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
+                </p>
+            {% endfor %}
         </div>
-    {% empty %}
-        <p>К сожалению, нет ни одного комментария</p>
-    {% endfor %}
-    {% include "books/includes/comment_form.html" %}
+    {% endif %}
+    <div class="row card mt-2">
+        {% with comments.count as total_comments %}
+            <h2>
+                Комментариев: {{ total_comments }}
+            </h2>
+            <hr class="mt-1 mb-1"/>
+        {% endwith %}
+        {% for comment in comments %}
+            <div class="comment">
+                <p class="text-muted fst-italic mb-2">
+                    Комментарий {{ forloop.counter }} от {{ comment.name }}
+                    {{ comment.created }}
+                </p>
+                {{ comment.body|safe }}
+            </div>
+            <hr class="mt-1 mb-1"/>
+        {% empty %}
+            <p>Пока еще нет комментариев</p>
+        {% endfor %}
+        {% include "books/includes/comment_form.html" %}
+    </div>
 {% endblock %}

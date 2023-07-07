@@ -1,0 +1,3 @@
+{% for book in most_commented_books %}
+            <a class="list-group-item list-group-item-action" href="{{ book.get_absolute_url }}">{{book.author}} - {{ book.title }}</a>
+    {% endfor %}

@@ -1,35 +1,33 @@
 {% extends "books/base.html" %}
 {% load books_tags %}
-{% block title %}Мои книги{% endblock %}
+
+{% block title %}My Blog{% endblock %}
 
 {% block content %}
-<h1>Мои книги</h1>
+    <h1>Мои книги</h1>
     {% if tag %}
-        <h2>Книги, помеченные тегом: "{{ tag.name }}"</h2>
-    {% endif %}
+        <h2>Книга помечена тегами: "{{ tag.name }}"</h2> {% endif %}
     {% for book in books %}
-    <h2>
-        <a href="{{book.get_absolute_url}}">{{ book.title }}</a>
-    </h2>
-    <p class="tags">
+        <h2 class="fw-bolder">
+            <a href="{{ book.get_absolute_url }}">
+                {{ book.title }}
+            </a>
+        </h2>
+        <div class="row">
+            {% if post.tags.all %}
             Теги:
             {% for tag in book.tags.all %}
-                <a href="{% url 'books:book_list_by_tag' tag.slug %}">
+                <a class="badge bg-secondary text-decoration-none link-light" href="{% url 'books:book_list_by_tag' tag.slug %}">
                     {{ tag.name }}
                 </a>
                 {% if not forloop.last %}, {% endif %}
             {% endfor %}
-        <p class="date">
-            Published {{ post.publish }} by {{ post.author }}
-        </p>
-        <p class="date">
-            {{ book.published }}
-        </p>
-    <div>
-        <p><img src="{{book.photo.url}}" width="40%"></p>
-        <p style="align: right">{{book.written}}</p>
-    </div>
-    {{book.description|markdown|truncatewords_html:30}}
+        {% endif %}
+        </div>
+        <div class="text-muted fst-italic mb-2">
+            Добавлена {{ post.published }}
+        </div>
+        <div  class="mb-5">{{ book.description|markdown|truncatewords_html:30 }}</div>
     {% endfor %}
-    {% include "books/pagination.html" with page=books %}
+    {% include 'books/pagination.html' with page=books %}
 {% endblock %}

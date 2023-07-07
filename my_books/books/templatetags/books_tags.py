@@ -23,8 +23,9 @@ def show_best_books(count=5):
     return {'best_books': best_books}
 
 
-@register.simple_tag
+@register.inclusion_tag('books/commented_books.html')
 def get_most_commented_books(count=5):
-    return Book.read.annotate(
+    most_commented_books = Book.read.annotate(
         total_comments=Count('comments')
     ).order_by('-total_comments')[:count]
+    return {'most_commented_books': most_commented_books}
