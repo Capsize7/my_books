@@ -12,7 +12,7 @@
         <a href="{{book.get_absolute_url}}">{{ book.title }}</a>
     </h2>
     <p class="tags">
-            Tags:
+            Теги:
             {% for tag in book.tags.all %}
                 <a href="{% url 'books:book_list_by_tag' tag.slug %}">
                     {{ tag.name }}

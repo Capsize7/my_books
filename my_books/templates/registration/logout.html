@@ -1,0 +1,10 @@
+{% extends "books/base.html" %}
+{% block title %}Logout{% endblock title %}
+{% block content %}
+    <div>
+        <h2>Вы вышли из аккаунта</h2>
+        <hr>
+        <a href="{% url 'login' %}">Войти снова</a>
+        <br><br><a href="{% url 'books:books_list' %}">Главная страница</a>
+    </div>
+{% endblock content %}
