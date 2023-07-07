@@ -12,8 +12,24 @@
     {% endblock %}
 </div>
 <div id="sidebar">
-    <h2>Мои книги</h2>
+    {% if messages %}
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    {% endif %}
+    <h2><a href="{% url 'books:books_list' %}">Мои книги</a></h2>
     <p>На данный момент я прочитал {% total_books %} книг</p>
+    <hr>
+    {% if user.is_authenticated %}
+        Привет, {{ user.username }}!
+       <p><a href="{% url 'users-profile' %}">Мой профиль</a></p>
+        <p><a href="{% url 'logout' %}">Выйти</a></p>
+    {% else %}
+        <p><a href="{% url 'login' %}">Войти</a></p>
+        <p><a href="{% url 'signup' %}">Зарегистрироваться</a></p>
+        <p><a href="{% url 'password_reset' %}">Забыли пароль?</a></p>
+    {% endif %}
+    <hr>
     <h3>Лучшие прочитанные книги: </h3>
     {% show_best_books 3 %}
     <h3>Самые обсуждаемые книги: </h3>

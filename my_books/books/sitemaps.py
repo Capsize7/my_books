@@ -10,4 +10,4 @@ class BooksSitemap(Sitemap):
         return Book.read.all()
 
     def lastmod(self, obj):
-        return obj.updated
+        return obj.published

@@ -41,7 +41,7 @@ class Book(models.Model):
 
     objects = models.Manager()
     read = ReadManager()
-    tags = TaggableManager()
+    tags = TaggableManager(verbose_name='Теги')
 
     class Meta:
         ordering = ['title', 'author']

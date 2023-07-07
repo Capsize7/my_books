@@ -1,0 +1,30 @@
+{% extends "books/base.html" %} {% load books_tags %}
+
+{% block title %}Поиск{% endblock %}
+
+{% block content %} {% if query %}
+    <h1>
+        Книги содержащие: "{{ query }}"
+    </h1>
+    <h3>
+        {% with results.count as total_results %}
+            Найдено книг: {{ total_results }} {% endwith %}
+    </h3>
+    {% for book in results %}
+        <h4>
+            <a href="{{ book.get_absolute_url }}"> {{ book.title }}
+            </a>
+            <br><p><img src="{{book.photo.url}}" width="30%"></p>
+        </h4>
+        {{ book.description|markdown|truncatewords_html:12 }} {% empty %}
+        <p>Нет результата на запрос</p>
+    {% endfor %}
+    <p><a href="{% url 'books:book_search' %}">Поиск снова</a></p> {% else %}
+    <h1>
+        Поиск для книг
+    </h1>
+    <form method="get">
+        {{ form.as_p }}
+        <input type="submit" value="Search">
+    </form>
+{% endif %} {% endblock %}
