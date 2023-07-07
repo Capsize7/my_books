@@ -5,24 +5,24 @@ from django_summernote.widgets import SummernoteWidget
 
 class EmailPostForm(forms.Form):
     name = forms.CharField(max_length=25, required=True,
-                           widget=forms.TextInput(attrs={"class": "form-control mb-1", 'placeholder': 'Имя'}))
+                           widget=forms.TextInput(attrs={"class": "form-control mb-1"}), label="Имя")
     email = forms.EmailField(required=True,
-                             widget=forms.TextInput(attrs={"class": "form-control mb-1", 'placeholder': 'Email'}))
+                             widget=forms.TextInput(attrs={"class": "form-control mb-1"}), label="Ваша почта")
     to = forms.EmailField(required=True,
-                          widget=forms.TextInput(attrs={"class": "form-control mb-1", 'placeholder': 'Кому'}))
+                          widget=forms.TextInput(attrs={"class": "form-control mb-1"}), label="Почта получателя")
     comments = forms.CharField(required=False,
                                widget=forms.Textarea(
-                                   attrs={"class": "form-control mb-1", 'placeholder': 'Комментарий'}))
+                                   attrs={"class": "form-control mb-1", }), label='Комментарий')
 
 
 class CommentForm(forms.ModelForm):
-    name = forms.CharField(required=True, widget=forms.TextInput(attrs={"class": "form-control", 'placeholder': 'Имя'}))
+    name = forms.CharField(required=True, widget=forms.TextInput(attrs={"class": "form-control"}), label="Имя")
     email = forms.EmailField(required=True,
-                             widget=forms.EmailInput(attrs={"class": "form-control", 'placeholder': 'Email'}))
+                             widget=forms.EmailInput(attrs={"class": "form-control"}), label='Почта')
     body = forms.CharField(required=True,
                            widget=SummernoteWidget(
-                               attrs={"class": "form-control", 'placeholder': 'Комментарий',
-                                      'summernote': {'width': '100%', 'height': '300px'}}))
+                               attrs={"class": "form-control",
+                                      'summernote': {'width': '100%', 'height': '300px'}}), label='Комментарий')
 
     class Meta:
         model = Comment

@@ -1,30 +1,28 @@
-{% extends "books/base.html" %} {% load books_tags %}
+{% extends "books/base.html" %}
+{% load books_tags %}
 
-{% block title %}Поиск{% endblock %}
+{% block title %}Search{% endblock %}
 
 {% block content %} {% if query %}
     <h1>
-        Книги содержащие: "{{ query }}"
-    </h1>
+        Книги по запросу: "{{ query }}"
+    </h1><br>
     <h3>
         {% with results.count as total_results %}
-            Найдено книг: {{ total_results }} {% endwith %}
-    </h3>
+            Найдено книг: {{ total_results }}  {% endwith %}
+    </h3><br>
+    <hr class="mt-0 mb-4"/>
     {% for book in results %}
         <h4>
             <a href="{{ book.get_absolute_url }}"> {{ book.title }}
             </a>
-            <br><p><img src="{{book.photo.url}}" width="30%"></p>
         </h4>
         {{ book.description|markdown|truncatewords_html:12 }} {% empty %}
-        <p>Нет результата на запрос</p>
+        <p>К сожалению, по данному запросу книг нет</p>
     {% endfor %}
-    <p><a href="{% url 'books:book_search' %}">Поиск снова</a></p> {% else %}
-    <h1>
-        Поиск для книг
-    </h1>
+    <p><a href="{% url 'books:book_search' %}">Искать снова</a></p> {% else %}
     <form method="get">
-        {{ form.as_p }}
-        <input type="submit" value="Search">
+        {{ form.query }}
+        <input type="submit" value="Поиск" class="btn btn-primary mb-3 btn-lg">
     </form>
 {% endif %} {% endblock %}

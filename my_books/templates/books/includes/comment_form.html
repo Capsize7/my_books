@@ -1,12 +1,19 @@
-<h2>Добавить новый комментарий</h2>
 <form action="{% url 'books:book_comment' book.id %}" method="post">
-  {% for field in form %}
-   <div><br>
-      {{ field.errors }}
-      {{ field.label_tag }}<br>
-       {{ field }}
-   </div>
-    {% endfor %}
     {% csrf_token %}
-    <p><input type="submit" value="Add comment"></p>
+    <div class="row">
+        <h3>Добавить новый комментарий</h3>
+        <div class="col mt-2">
+            {{ form.name.label_tag }}
+            {{ form.name }}
+        </div>
+        <div class="col mt-2">
+            {{ form.email.label_tag }}
+            {{ form.email }}
+        </div>
+        <div class="mt-2">
+            {{ form.body.label_tag }}
+            {{ form.body }}
+            <input type="submit" class="btn btn-primary mb-3" value="Добавить">
+        </div>
+    </div>
 </form>

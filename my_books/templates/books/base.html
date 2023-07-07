@@ -1,46 +1,98 @@
-{% load static %}
 {% load books_tags %}
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>{% block title %}{% endblock %}</title>
-    <link href="{% static 'css/books.css' %}" rel="stylesheet">
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
 </head>
 <body>
-<div id="content">
-    {% block content %}
-    {% endblock %}
+<!-- Responsive navbar-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">Мои книги</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
+                class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'users-profile' %}"><img
+                            class="rounded-circle" width="30" src="{{ user.profile.avatar.url }}"/> {{ user.username }}
+                    </a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Выйти</a></li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Войти</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- Page content-->
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="container d-flex align-items-center justify-content-center">
+                        <div class="alert alert-warning alert-dismissible fade show w-50  d-block" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% block content %}
+            {% endblock %}
+        </div>
+        <!-- Widgets-->
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-header">Мои книги</div>
+                <div class="card-body">
+                    На данный момент я прочитал книг: {% total_books %}
+                </div>
+            </div>
+            <!-- Search widget-->
+            <div class="card mb-4">
+                <div class="card-header">Поиск</div>
+                <div class="card-body">
+                    <div class="input-group">
+                        <form action="/search/" method="get" class="input-group">
+                            <input type="text" name="query" class="form-control" placeholder="Введите слово"
+                                   required="" id="id_query">
+                            <button class="btn btn-primary" id="button-search" type="submit">Искать</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Latest posts widget-->
+            <div class="card mb-4">
+                <div class="list-group">
+                    <a class="list-group-item list-group-item-action active" aria-current="true">
+                        Топ 3 прочитанных книг:
+                    </a>
+                    {% show_best_books 3 %}
+                </div>
+            </div>
+            <div class="card mb-4">
+                <div class="list-group">
+                    <a class="list-group-item list-group-item-action active" aria-current="true">
+                        Самые обсуждаемые книги:
+                    </a>
+                    {% get_most_commented_books 3 %}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div id="sidebar">
-    {% if messages %}
-        {% for message in messages %}
-            {{ message }}
-        {% endfor %}
-    {% endif %}
-    <h2><a href="{% url 'books:books_list' %}">Мои книги</a></h2>
-    <p>На данный момент я прочитал {% total_books %} книг</p>
-    <hr>
-    {% if user.is_authenticated %}
-        Привет, {{ user.username }}!
-       <p><a href="{% url 'users-profile' %}">Мой профиль</a></p>
-        <p><a href="{% url 'logout' %}">Выйти</a></p>
-    {% else %}
-        <p><a href="{% url 'login' %}">Войти</a></p>
-        <p><a href="{% url 'signup' %}">Зарегистрироваться</a></p>
-        <p><a href="{% url 'password_reset' %}">Забыли пароль?</a></p>
-    {% endif %}
-    <hr>
-    <h3>Лучшие прочитанные книги: </h3>
-    {% show_best_books 3 %}
-    <h3>Самые обсуждаемые книги: </h3>
-      {% get_most_commented_books as most_commented_books %}
-      <ul>
-         {% for book in most_commented_books %}
-         <li>
-            <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
-         </li>
-         {% endfor %}
-      </ul>
-</div>
+<!-- Footer-->
+<footer class="py-3 bg-dark mt-2">
+    <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Мой сайт 2023 Powered by
+        Django</p></div>
+</footer>
 </body>
 </html>
