@@ -9,6 +9,10 @@ class ReadManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(status=Book.Status.READ)
 
+class WantToReadManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(status=Book.Status.WANT_TO_READ)
+
 
 class Genre(models.Model):
     name = models.CharField(max_length=250, verbose_name='Название')
@@ -41,10 +45,11 @@ class Book(models.Model):
 
     objects = models.Manager()
     read = ReadManager()
+    want_to_read = WantToReadManager()
     tags = TaggableManager(verbose_name='Теги')
 
     class Meta:
-        ordering = ['title', 'author']
+        ordering = ['-rating']
         indexes = [models.Index(fields=['title', 'author'])]
         verbose_name = 'Книги'
         verbose_name_plural = 'Книги'

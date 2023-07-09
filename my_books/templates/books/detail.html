@@ -4,16 +4,34 @@
 {% block title %}{{ book.title }}{% endblock %}
 
 {% block content %}
-    <h1 class="fw-bolder text-center ">{{ book.title }}</h1>
-    <p class="text-muted fst-italic mb-2 text-end">
+    <h1 class="fw-bolder text-center" style="font-size: 2em">{{ book.title }}</h1>
+    <p class="text-muted fst-italic mb-2" align="center">
         Добавлена {{ book.published }}
     </p>
     <div>
-        <div><img src="{{book.photo.url}}" width="50%"></div>
-        <span>Автор: {{book.author}}</span><br>
-            <span>Год написания: {{book.written}}</span>
+        <section style="float: left">
+            <img src="{{book.photo.url}}" width="30%" style="float: left; width: 40%; padding: 10px;">
+            <aside style="width: 60%; float: right; padding: 60px 30px 0px;" class="mb-5">
+                Автор книги - {{ book.author }}<hr>
+                Жанр - {{ book.genre }}<hr>
+                Дата написания - {{ book.written }}<hr>
+                {% if book.rating > 0 %}
+                Рейтинг - {{ book.rating }}/10<hr>
+                {% endif %}
+                {% if book.tags %}
+                Теги:
+                {% for tag in book.tags.all %}
+                <a class="badge bg-secondary text-decoration-none link-light" href="{% url 'books:book_list_by_tag' tag.slug %}">
+                    {{ tag.name }}
+                </a>
+                {% if not forloop.last %}, {% endif %}
+                {% endfor %}
+                {%endif%}
+            </aside>
+        </section>
     </div>
     <div>
+        <h4 align="center" style="padding-top: 41%;">Описание книги</h4>
         {{ book.description|markdown }}
     </div>
     <div class="d-flex justify-content-end">
@@ -23,19 +41,22 @@
     </div>
     {% if similar_books %}
         <div class="row card mt-2">
-            <h2>Похожие книги</h2>
+            <h2 align="center">Похожие книги</h2>
             {% for book in similar_books %}
                 <p>
-                    <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
+                    <a href="{{ book.get_absolute_url }}" style="text-decoration: none">{{ book.title }}</a>
                 </p>
             {% endfor %}
         </div>
     {% endif %}
     <div class="row card mt-2">
         {% with comments.count as total_comments %}
-            <h2>
+            <h2 align="center">
                 Комментариев: {{ total_comments }}
             </h2>
+            {% if not auth %}
+            <a href="{% url 'accounts:login' %}" style="text-align: center; text-decoration: none">Чтобы оставлять комментарии, пожалуйста, авторизуйтесь или создайте аккаунт</a>
+            {% endif %}
             <hr class="mt-1 mb-1"/>
         {% endwith %}
         {% for comment in comments %}
@@ -50,6 +71,8 @@
         {% empty %}
             <p>Пока еще нет комментариев</p>
         {% endfor %}
-        {% include "books/includes/comment_form.html" %}
+        {% if auth %}
+            {% include "books/includes/comment_form.html" %}
+        {% endif%}
     </div>
 {% endblock %}

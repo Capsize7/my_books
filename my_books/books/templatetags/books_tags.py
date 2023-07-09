@@ -2,7 +2,7 @@ from django.db.models import Count
 from django.utils.safestring import mark_safe
 from django import template
 import markdown
-from ..models import Book
+from ..models import Book, Genre
 
 register = template.Library()
 
@@ -29,3 +29,7 @@ def get_most_commented_books(count=5):
         total_comments=Count('comments')
     ).order_by('-total_comments')[:count]
     return {'most_commented_books': most_commented_books}
+
+@register.simple_tag()
+def get_genres():
+    return Genre.objects.all()

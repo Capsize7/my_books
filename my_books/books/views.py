@@ -4,6 +4,8 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.http import require_POST
 from taggit.models import Tag
+
+from accounts.models import Profile
 from .forms import EmailPostForm, CommentForm, SearchForm
 from .models import *
 from django.db.models import Count
@@ -11,22 +13,31 @@ from django.contrib.postgres.search import TrigramSimilarity
 
 
 # Create your views here.
-def books_list(request, tag_slug=None):
+def books_list(request, tag_slug=None, genre_slug=None):
     book_list = Book.read.all()
     tag = None
+    main = True
     if tag_slug:
+        main = False
         tag = get_object_or_404(Tag, slug=tag_slug)
         book_list = book_list.filter(tags__in=[tag])
+
+    if genre_slug:
+        main = False
+        if genre_slug == 'hochu-prochest':
+            book_list = Book.want_to_read.all()
+        else:
+            genre_id = Genre.objects.get(slug=genre_slug).id
+            book_list = book_list.filter(genre_id=genre_id)
 
     paginator = Paginator(book_list, 3)
     page_number = request.GET.get('page', 1)
     books = paginator.get_page(page_number)
-    return render(request, 'books/list.html', {'books': books, 'tag': tag})
+    return render(request, 'books/list.html', {'books': books, 'tag': tag, 'genre_slug': genre_slug, 'main':main})
 
 
-def book_detail(request, book):
-    book = get_object_or_404(Book, slug=book,
-                             status=Book.Status.READ)
+def book_detail(request, book, read=True):
+    book = get_object_or_404(Book, slug=book)
     comments = book.comments.all()
     form = CommentForm()
     book_tags_ids = book.tags.values_list('id', flat=True)
@@ -34,8 +45,9 @@ def book_detail(request, book):
         .exclude(id=book.id)
     similar_books = similar_books.annotate(same_tags=Count('tags')) \
                         .order_by('-same_tags', '-published')[:4]
+    auth = request.user.is_authenticated
     return render(request, 'books/detail.html',
-                  {'book': book, 'comments': comments, 'form': form, 'similar_books': similar_books})
+                  {'book': book, 'comments': comments, 'form': form, 'similar_books': similar_books, 'auth': auth})
 
 
 def book_share(request, book_id):
@@ -67,6 +79,8 @@ def book_comment(request, book_id):
     if form.is_valid():
         comment = form.save(commit=False)
         comment.book = book
+        comment.author = request.user
+        comment.name = request.user.username
         comment.save()
     return render(request, 'books/comment.html', {'book': book, 'form': form, 'comment': comment})
 

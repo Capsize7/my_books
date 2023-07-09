@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 from dotenv import load_dotenv
 import os
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -151,8 +152,16 @@ SOCIAL_AUTH_GITHUB_SECRET = str(os.getenv('GITHUB_SECRET'))
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = str(os.getenv('GOOGLE_KEY'))
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = str(os.getenv('GOOGLE_SECRET'))
 
-SUMMERNOTE_THEME = 'bs5'
 
 LOGIN_REDIRECT_URL = "/"
 
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 30
+
+SUMMERNOTE_CONFIG = {
+    'summernote': {
+        'fontNames': ['Serif', 'Sans', 'Arial', 'Arial Black', 'Courier', 'Courier New', 'Comic Sans MS', 'Helvetica',
+                    'Impact', 'Lucida Grande', 'Sacramento'],
+        'fontNamesIgnoreCheck': ['Serif', 'Sans', 'Arial', 'Arial Black', 'Courier', 'Courier New', 'Comic Sans MS',
+                               'Helvetica', 'Impact', 'Lucida Grande', 'Sacramento'],
+    }
+}

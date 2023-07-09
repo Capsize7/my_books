@@ -9,6 +9,7 @@ urlpatterns = [
     path('search/', book_search, name='book_search'),
     path('<slug:book>/', book_detail, name='book_detail'),
     path('tag/<slug:tag_slug>/', books_list, name='book_list_by_tag'),
+    path('genre/<slug:genre_slug>/', books_list, name='book_list_by_genre'),
     path('<int:book_id>/share/', book_share, name='book_share'),
     path('<int:book_id>/comment/', book_comment, name='book_comment'),
 
