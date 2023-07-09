@@ -16,9 +16,6 @@ class EmailPostForm(forms.Form):
 
 
 class CommentForm(forms.ModelForm):
-    name = forms.CharField(required=True, widget=forms.TextInput(attrs={"class": "form-control"}), label="Имя")
-    email = forms.EmailField(required=True,
-                             widget=forms.EmailInput(attrs={"class": "form-control"}), label='Почта')
     body = forms.CharField(required=True,
                            widget=SummernoteWidget(
                                attrs={"class": "form-control",
@@ -26,7 +23,7 @@ class CommentForm(forms.ModelForm):
 
     class Meta:
         model = Comment
-        fields = ['name', 'email', 'body']
+        fields = ['body']
 
 
 class SearchForm(forms.Form):

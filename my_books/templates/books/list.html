@@ -1,20 +1,26 @@
 {% extends "books/base.html" %}
 {% load books_tags %}
 
-{% block title %}My Blog{% endblock %}
+{% block title %}My Books{% endblock %}
 
 {% block content %}
-    <h1>Мои книги</h1>
+    {% if not tag %}
+    <h1 align="center">Мои прочитанные книги</h1>
+    {% endif %}
     {% if tag %}
-        <h2>Книга помечена тегами: "{{ tag.name }}"</h2> {% endif %}
+        <h2>Книги помеченные тегами: <i>"{{ tag.name }}"</i></h2> {% endif %}
     {% for book in books %}
+    <div class="container">
         <h2 class="fw-bolder">
-            <a href="{{ book.get_absolute_url }}">
+            <a href="{{ book.get_absolute_url }}" style="font-size: 75%; text-decoration: none; ">
                 {{ book.title }}
             </a>
         </h2>
-        <div class="row">
-            {% if post.tags.all %}
+        <div class="text-muted fst-italic mb-2">
+            Добавлена {{ book.published }}
+        </div>
+        <div>
+            {% if book.tags %}
             Теги:
             {% for tag in book.tags.all %}
                 <a class="badge bg-secondary text-decoration-none link-light" href="{% url 'books:book_list_by_tag' tag.slug %}">
@@ -24,10 +30,11 @@
             {% endfor %}
         {% endif %}
         </div>
-        <div class="text-muted fst-italic mb-2">
-            Добавлена {{ post.published }}
-        </div>
-        <div  class="mb-5">{{ book.description|markdown|truncatewords_html:30 }}</div>
+        <section style="float: left">
+            <img src="{{book.photo.url}}" width="30%" style="float: left; width: 35%; padding: 10px; ">
+            <div style="padding: 50px 0px 0px;"><aside style="float: right; width: 60%;" class="mb-5">{{ book.description|markdown|truncatewords_html:60 }}</aside></div>
+        </section>
+    </div>
     {% endfor %}
     {% include 'books/pagination.html' with page=books %}
 {% endblock %}

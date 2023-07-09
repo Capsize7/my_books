@@ -1,8 +1,8 @@
 {% extends "books/base.html" %}
 {% block title %}Profile Page{% endblock title %}
 {% block content %}
-    <div>
-        <img src="{{ user.profile.avatar.url }}"/>
+    <div style="padding-bottom: 15px">
+        <img src="{{ user.profile.avatar.url }}" style="border-radius: 35%;"/>
     </div>
     {% if user_form.errors %}
         <div class="container d-flex align-items-center justify-content-center">

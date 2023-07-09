@@ -8,7 +8,7 @@ a {
     color: #00abff;
     text-decoration: none;
 }
-   a:hover {
+navbar-brand:hover {
     color: orange; /* Цвет ссылки */
    }
 
