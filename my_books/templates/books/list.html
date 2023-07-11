@@ -12,12 +12,15 @@
     {% for book in books %}
     <div class="container">
         <h2 class="fw-bolder">
-            <a href="{{ book.get_absolute_url }}" style="font-size: 75%; text-decoration: none; ">
+            <a href="{{ book.get_absolute_url }}" style="font-size: 75%; text-decoration: none;">
                 {{ book.title }}
             </a>
         </h2>
         <div class="text-muted fst-italic mb-2">
             Добавлена {{ book.published }}
+        </div>
+        <div style="padding-bottom: 13px">
+            Автор - {{book.author}}
         </div>
         <div>
             {% if book.tags %}
@@ -31,10 +34,10 @@
         {% endif %}
         </div>
         <section style="float: left">
-            <img src="{{book.photo.url}}" width="30%" style="float: left; width: 35%; padding: 10px; ">
+            <img src="{{book.photo.url}}" width="30%" height="30%" style="float: left; width: 35%; padding: 10px; ">
             <div style="padding: 50px 0px 0px;"><aside style="float: right; width: 60%;" class="mb-5">{{ book.description|markdown|truncatewords_html:60 }}</aside></div>
         </section>
     </div>
     {% endfor %}
-    {% include 'books/pagination.html' with page=books %}
+<div class="container">{% include 'books/pagination.html' with page=books %}</div>
 {% endblock %}

@@ -30,6 +30,13 @@ def get_most_commented_books(count=5):
     ).order_by('-total_comments')[:count]
     return {'most_commented_books': most_commented_books}
 
+
 @register.simple_tag()
 def get_genres():
     return Genre.objects.all()
+
+
+@register.inclusion_tag('books/ordering.html')
+def get_ordering(curr_order=None, genre_slug=None):
+    ordering = {'title': "Название", 'author': "Автор", 'rating': 'Рейтинг', 'written': "Год написания"}
+    return {'ordering': ordering, 'curr_order': curr_order, 'genre_slug': genre_slug}

@@ -17,7 +17,8 @@
             <a href="{{ book.get_absolute_url }}"> {{ book.title }}
             </a>
         </h4>
-        {{ book.description|markdown|truncatewords_html:12 }} {% empty %}
+        <p>{{book.author}}</p>
+        {% empty %}
         <p>К сожалению, по данному запросу книг нет</p>
     {% endfor %}
     <p><a href="{% url 'books:book_search' %}">Искать снова</a></p> {% else %}

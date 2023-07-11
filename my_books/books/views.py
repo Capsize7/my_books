@@ -13,8 +13,11 @@ from django.contrib.postgres.search import TrigramSimilarity
 
 
 # Create your views here.
-def books_list(request, tag_slug=None, genre_slug=None):
-    book_list = Book.read.all()
+def books_list(request, tag_slug=None, genre_slug=None, ordering='rating'):
+    if ordering == 'rating':
+        book_list = Book.read.all()
+    else:
+        book_list = Book.read.all().order_by(ordering)
     tag = None
     main = True
     if tag_slug:
@@ -33,7 +36,8 @@ def books_list(request, tag_slug=None, genre_slug=None):
     paginator = Paginator(book_list, 3)
     page_number = request.GET.get('page', 1)
     books = paginator.get_page(page_number)
-    return render(request, 'books/list.html', {'books': books, 'tag': tag, 'genre_slug': genre_slug, 'main':main})
+    return render(request, 'books/list.html',
+                  {'books': books, 'tag': tag, 'genre_slug': genre_slug, 'main': main, 'ordering': ordering})
 
 
 def book_detail(request, book, read=True):
@@ -96,7 +100,11 @@ def book_search(request):
             query = form.cleaned_data['query']
             results = Book.read.annotate(
                 similarity=TrigramSimilarity(('title'), query),
-            ).filter(similarity__gt=0.1).order_by('-similarity')
+            ).filter(similarity__gt=0.2).order_by('-similarity')
+            if not results:
+                results = Book.read.annotate(
+                    similarity=TrigramSimilarity(('author'), query),
+                ).filter(similarity__gt=0.2).order_by('-similarity')
 
     return render(request,
                   'books/search.html',
