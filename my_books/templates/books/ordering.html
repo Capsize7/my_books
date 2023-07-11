@@ -1,0 +1,6 @@
+ {% for order, name in ordering.items %}
+            <a class="list-group-item list-group-item-action"
+               style="{% if order == curr_order %}background-color: #C0C0C0; {% endif %}"
+               href="{% if not genre_slug %} {% url 'books:books_list_ordering' ordering=order %}
+                {% else %} {% url 'books:book_list_by_genre_ordering' ordering=order genre_slug=genre_slug %} {% endif %}">{{name}}</a>
+ {% endfor %}

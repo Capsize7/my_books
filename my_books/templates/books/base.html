@@ -61,7 +61,6 @@
                     На данный момент я прочитал книг: {% total_books %}
                 </div>
             </div>
-            <!-- Search widget-->
             <div class="card mb-4">
                 <div class="card-header">Поиск</div>
                 <div class="card-body">
@@ -74,7 +73,6 @@
                     </div>
                 </div>
             </div>
-            <!-- Latest posts widget-->
             <div class="card mb-4">
                 <div class="list-group">
                     <a class="list-group-item list-group-item-action active" aria-current="true">
@@ -89,6 +87,14 @@
                         Самые обсуждаемые книги:
                     </a>
                     {% get_most_commented_books 3 %}
+                </div>
+            </div>
+            <div class="card mb-4">
+                <div class="list-group">
+                    <a class="list-group-item list-group-item-action active" aria-current="true">
+                        Сортировка:
+                    </a>
+                    {% get_ordering ordering genre_slug %}
                 </div>
             </div>
         </div>
