@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
     'accounts.apps.AccountsConfig',
     'social_django',
+    'django_extensions'
 
 ]
 

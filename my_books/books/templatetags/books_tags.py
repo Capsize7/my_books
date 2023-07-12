@@ -37,6 +37,6 @@ def get_genres():
 
 
 @register.inclusion_tag('books/ordering.html')
-def get_ordering(curr_order=None, genre_slug=None):
+def get_ordering(curr_order=None, genre_slug=None, direction=None):
     ordering = {'title': "Название", 'author': "Автор", 'rating': 'Рейтинг', 'written': "Год написания"}
-    return {'ordering': ordering, 'curr_order': curr_order, 'genre_slug': genre_slug}
+    return {'ordering': ordering, 'curr_order': curr_order, 'genre_slug': genre_slug, 'direction': direction}

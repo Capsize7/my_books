@@ -44,7 +44,7 @@
             <h2 align="center">Похожие книги</h2>
             {% for book in similar_books %}
                 <p>
-                    <a href="{{ book.get_absolute_url }}" style="text-decoration: none">{{ book.title }}</a>
+                    <a href="{{ book.get_absolute_url }}" style="text-decoration: none">{{ book }}</a>
                 </p>
             {% endfor %}
         </div>
@@ -54,6 +54,16 @@
             <h2 align="center">
                 Комментариев: {{ total_comments }}
             </h2>
+            <div>
+            <a class="{% if ordering == '-created' %}btn btn-secondary {%else%} btn btn-primary {%endif%}
+            float-left" style="float: right" href="{% url 'books:book_detail' book.slug %}">
+                Сначала новые
+            </a>
+            <a class="{% if ordering == 'created' %}btn btn-secondary {%else%} btn btn-primary {%endif%}
+             float-left" href="{% url 'books:book_detail' book.slug 'created' %}">
+                Сначала старые
+            </a>
+            </div>
             {% if not auth %}
             <a href="{% url 'accounts:login' %}" style="text-align: center; text-decoration: none">Чтобы оставлять комментарии, пожалуйста, авторизуйтесь или создайте аккаунт</a>
             {% endif %}
