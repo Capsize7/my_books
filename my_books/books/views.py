@@ -1,11 +1,8 @@
-from django.contrib.postgres.search import SearchVector
 from django.core.mail import send_mail
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.http import require_POST
 from taggit.models import Tag
-
-from accounts.models import Profile
 from .forms import EmailPostForm, CommentForm, SearchForm
 from .models import *
 from django.db.models import Count
@@ -13,11 +10,13 @@ from django.contrib.postgres.search import TrigramSimilarity
 
 
 # Create your views here.
-def books_list(request, tag_slug=None, genre_slug=None, ordering='rating'):
-    if ordering == 'rating':
-        book_list = Book.read.all()
+def books_list(request, tag_slug=None, genre_slug=None, ordering='rating', direction='&uarr;'):
+    direction_symbols = {'&darr;': '&uarr;', '&uarr;': '&darr;'}
+    direction = direction_symbols[direction]
+    if direction == '&darr;':
+        book_list = Book.read.all().order_by('-' + ordering).distinct()
     else:
-        book_list = Book.read.all().order_by(ordering)
+        book_list = Book.read.all().order_by(ordering).distinct()
     tag = None
     main = True
     if tag_slug:
@@ -37,12 +36,13 @@ def books_list(request, tag_slug=None, genre_slug=None, ordering='rating'):
     page_number = request.GET.get('page', 1)
     books = paginator.get_page(page_number)
     return render(request, 'books/list.html',
-                  {'books': books, 'tag': tag, 'genre_slug': genre_slug, 'main': main, 'ordering': ordering})
+                  {'books': books, 'tag': tag, 'genre_slug': genre_slug, 'main': main, 'ordering': ordering,
+                   'direction': direction})
 
 
-def book_detail(request, book, read=True):
+def book_detail(request, book, ordering='-created', read=True):
     book = get_object_or_404(Book, slug=book)
-    comments = book.comments.all()
+    comments = book.comments.all().order_by(ordering)
     form = CommentForm()
     book_tags_ids = book.tags.values_list('id', flat=True)
     similar_books = Book.read.filter(tags__in=book_tags_ids) \
@@ -51,7 +51,8 @@ def book_detail(request, book, read=True):
                         .order_by('-same_tags', '-published')[:4]
     auth = request.user.is_authenticated
     return render(request, 'books/detail.html',
-                  {'book': book, 'comments': comments, 'form': form, 'similar_books': similar_books, 'auth': auth})
+                  {'book': book, 'comments': comments, 'form': form, 'similar_books': similar_books, 'auth': auth,
+                   'ordering': ordering})
 
 
 def book_share(request, book_id):

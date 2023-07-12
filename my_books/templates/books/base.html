@@ -89,18 +89,19 @@
                     {% get_most_commented_books 3 %}
                 </div>
             </div>
+            {% if books %}
             <div class="card mb-4">
                 <div class="list-group">
                     <a class="list-group-item list-group-item-action active" aria-current="true">
                         Сортировка:
                     </a>
-                    {% get_ordering ordering genre_slug %}
+                    {% get_ordering ordering genre_slug direction%}
                 </div>
             </div>
+            {%endif%}
         </div>
     </div>
 </div>
-<!-- Footer-->
 <footer class="py-3 bg-dark mt-2">
     <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Мой сайт 2023 Powered by
         Django</p></div>
