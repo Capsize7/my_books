@@ -32,7 +32,7 @@ class SignUpView(generic.CreateView):
             username = form.cleaned_data.get('username')
             messages.success(request, f'Для {username} создан аккаунт')
 
-            return redirect(to='login')
+            return redirect(to='accounts:login')
 
         return render(request, self.template_name, {'form': form})
 
@@ -60,7 +60,7 @@ def profile(request):
             user_form.save()
             profile_form.save()
             messages.success(request, 'Ваш профиль успешно обновлен')
-            return redirect(to='users-profile')
+            return redirect(to='accounts:users-profile')
     else:
         user_form = UpdateUserForm(instance=request.user)
         profile_form = UpdateProfileForm(instance=request.user.profile)

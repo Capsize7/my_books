@@ -36,7 +36,6 @@
         </div>
     </div>
 </nav>
-<!-- Page content-->
 <div class="container mt-5">
     <div class="row">
         <div class="col-lg-8">
@@ -90,6 +89,7 @@
                 </div>
             </div>
             {% if books %}
+            {% if not author%}
             <div class="card mb-4">
                 <div class="list-group">
                     <a class="list-group-item list-group-item-action active" aria-current="true">
@@ -98,6 +98,7 @@
                     {% get_ordering ordering genre_slug direction%}
                 </div>
             </div>
+            {%endif%}
             {%endif%}
         </div>
     </div>

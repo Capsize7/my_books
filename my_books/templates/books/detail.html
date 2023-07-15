@@ -12,7 +12,7 @@
         <section style="float: left">
             <img src="{{book.photo.url}}" width="30%" style="float: left; width: 40%; padding: 10px;">
             <aside style="width: 60%; float: right; padding: 60px 30px 0px;" class="mb-5">
-                Автор книги - {{ book.author }}<hr>
+                Автор - <a href="{% url 'books:book_list_by_author' author=book.author %}"> {{ book.author }}</a><hr>
                 Жанр - {{ book.genre }}<hr>
                 Дата написания - {{ book.written }}<hr>
                 {% if book.rating > 0 %}
@@ -65,7 +65,7 @@
             </a>
             </div>
             {% if not auth %}
-            <a href="{% url 'accounts:login' %}" style="text-align: center; text-decoration: none">Чтобы оставлять комментарии, пожалуйста, авторизуйтесь или создайте аккаунт</a>
+            <a href="{% url 'accounts:login' %}" style="text-align: center; text-decoration: none; padding: 10px">Чтобы оставлять комментарии, пожалуйста, авторизуйтесь или создайте аккаунт</a>
             {% endif %}
             <hr class="mt-1 mb-1"/>
         {% endwith %}
@@ -74,8 +74,17 @@
                 <p class="text-muted fst-italic mb-2">
                     Комментарий {{ forloop.counter }} от {{ comment.name }}
                     {{ comment.created }}
+                    {% if comment.created != comment.updated %}
+                    <span style="float: right">Изменен: {{ comment.updated }}</span>
+                    {% endif %}
                 </p>
-                {{ comment.body|safe }}
+                <span style="padding: 0px">{{ comment.body|safe }}</span>
+                {% if comment.author.username == user.username %}
+                <a class="btn btn-primary" style="float: right"
+                   href="{% url 'books:book_detail_comment_edit' book=book.slug ordering=ordering comment_edit=True comment_id=comment.id %}">
+                Редактировать
+                </a>
+                {% endif %}
             </div>
             <hr class="mt-1 mb-1"/>
         {% empty %}
