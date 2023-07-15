@@ -10,13 +10,22 @@ from django.contrib.postgres.search import TrigramSimilarity
 
 
 # Create your views here.
-def books_list(request, tag_slug=None, genre_slug=None, ordering='rating', direction='&uarr;'):
+def books_list(request, tag_slug=None, genre_slug=None, ordering='rating', direction='&uarr;', author=None):
     direction_symbols = {'&darr;': '&uarr;', '&uarr;': '&darr;'}
     direction = direction_symbols[direction]
+    template = 'books/list.html'
     if direction == '&darr;':
-        book_list = Book.read.all().order_by('-' + ordering).distinct()
+        if not author:
+            book_list = Book.read.all().order_by('-' + ordering).distinct()
+        else:
+            template = 'books/list_author.html'
+            book_list = Book.read.all().filter(author=author).order_by('-' + ordering).distinct()
     else:
-        book_list = Book.read.all().order_by(ordering).distinct()
+        if not author:
+            book_list = Book.read.all().order_by(ordering).distinct()
+        else:
+            template = 'books/list_author.html'
+            book_list = Book.read.all().filter(author=author).order_by(ordering).distinct()
     tag = None
     main = True
     if tag_slug:
@@ -27,7 +36,10 @@ def books_list(request, tag_slug=None, genre_slug=None, ordering='rating', direc
     if genre_slug:
         main = False
         if genre_slug == 'hochu-prochest':
-            book_list = Book.want_to_read.all()
+            if direction == '&darr;':
+                book_list = Book.want_to_read.all().order_by('-' + ordering, 'title').distinct()
+            else:
+                book_list = Book.want_to_read.all().order_by(ordering, 'title').distinct()
         else:
             genre_id = Genre.objects.get(slug=genre_slug).id
             book_list = book_list.filter(genre_id=genre_id)
@@ -35,15 +47,18 @@ def books_list(request, tag_slug=None, genre_slug=None, ordering='rating', direc
     paginator = Paginator(book_list, 3)
     page_number = request.GET.get('page', 1)
     books = paginator.get_page(page_number)
-    return render(request, 'books/list.html',
+    return render(request, template,
                   {'books': books, 'tag': tag, 'genre_slug': genre_slug, 'main': main, 'ordering': ordering,
-                   'direction': direction})
+                   'direction': direction, 'paginator': paginator, 'author': author})
 
 
-def book_detail(request, book, ordering='-created', read=True):
+def book_detail(request, book, ordering='-created', read=True, comment_edit=None, comment_id=None):
     book = get_object_or_404(Book, slug=book)
     comments = book.comments.all().order_by(ordering)
-    form = CommentForm()
+    if not comment_edit:
+        form = CommentForm()
+    else:
+        form = CommentForm(instance=Comment.objects.get(id=comment_id))
     book_tags_ids = book.tags.values_list('id', flat=True)
     similar_books = Book.read.filter(tags__in=book_tags_ids) \
         .exclude(id=book.id)
@@ -52,7 +67,7 @@ def book_detail(request, book, ordering='-created', read=True):
     auth = request.user.is_authenticated
     return render(request, 'books/detail.html',
                   {'book': book, 'comments': comments, 'form': form, 'similar_books': similar_books, 'auth': auth,
-                   'ordering': ordering})
+                   'ordering': ordering, 'comment_edit': comment_edit, 'comment_id': comment_id})
 
 
 def book_share(request, book_id):
@@ -77,17 +92,23 @@ def book_share(request, book_id):
 
 
 @require_POST
-def book_comment(request, book_id):
-    book = get_object_or_404(Book, id=book_id)
+def book_comment(request, book_slug, comment_id=None):
+    book = get_object_or_404(Book, slug=book_slug)
     comment = None
-    form = CommentForm(data=request.POST)
-    if form.is_valid():
-        comment = form.save(commit=False)
-        comment.book = book
-        comment.author = request.user
-        comment.name = request.user.username
+    form = None
+    if not comment_id:
+        form = CommentForm(data=request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.book = book
+            comment.author = request.user
+            comment.name = request.user.username
+            comment.save()
+    else:
+        comment = Comment.objects.get(id=comment_id)
+        comment.body = request.POST['body']
         comment.save()
-    return render(request, 'books/comment.html', {'book': book, 'form': form, 'comment': comment})
+    return render(request, 'books/comment.html', {'book': book, 'form': form, 'comment': comment, 'comment_id': comment_id})
 
 
 def book_search(request):

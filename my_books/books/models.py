@@ -34,7 +34,7 @@ class Book(models.Model):
 
     title = models.CharField(max_length=250, unique=True, verbose_name='Название')
     author = models.CharField(max_length=250, verbose_name='Автор')
-    photo = models.ImageField(upload_to='books_images', default='default_books.jpg', verbose_name='Обложка')
+    photo = models.ImageField(upload_to='books_images', default='books_images/default_book.png', verbose_name='Обложка')
     slug = models.SlugField(max_length=250, verbose_name='Cлаг')
     description = models.TextField(verbose_name='Описание')
     written = models.IntegerField(verbose_name="Год издания")

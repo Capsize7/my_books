@@ -1,14 +1,15 @@
 {% extends "books/base.html" %}
 {% load books_tags %}
 
-{% block title %}My Books{% endblock %}
+{% block title %}Books by author{% endblock %}
 
 {% block content %}
     {% if not tag %}
-    <h1 align="center">Мои прочитанные книги</h1>
+    <h1 align="center">Все книги автора: {{author}}</h1>
     {% endif %}
     {% if tag %}
-        <h2>Книги помеченные тегами: <i>"{{ tag.name }}"</i></h2> {% endif %}
+        <h2>Книги помеченные тегами: <i>"{{ tag.name }}"</i></h2>
+    {% endif %}
     {% for book in books %}
     <div class="container">
         <h2 class="fw-bolder">
@@ -18,9 +19,6 @@
         </h2>
         <div class="text-muted fst-italic mb-2">
             Добавлена {{ book.published }}
-        </div>
-        <div style="padding-bottom: 13px">
-            Автор - <a href="{% url 'books:book_list_by_author' author=book.author %}">{{book.author}}</a>
         </div>
         <div>
             {% if book.tags %}

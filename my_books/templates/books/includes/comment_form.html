@@ -1,11 +1,16 @@
-<form action="{% url 'books:book_comment' book.id %}" method="post">
+<form action="{% if comment_edit %}{% url 'books:book_comment_edit' book.slug comment_id %}
+{% else %}{% url 'books:book_comment' book.slug %}{% endif %}" method="post">
     {% csrf_token %}
     <div class="row">
+        {% if comment_edit %}
+        <h3>Редактировать комментарий</h3>
+        {% else %}
         <h3>Добавить новый комментарий</h3>
+        {% endif %}
         <div class="mt-2">
             {{ form.body.label_tag }}
             {{ form.body }}
-            <input type="submit" class="btn btn-primary mb-3" value="Добавить">
+            <input type="submit" class="btn btn-primary mb-3" value="{% if comment_id %}Обновить{% else %}Добавить{% endif %}">
         </div>
     </div>
 </form>

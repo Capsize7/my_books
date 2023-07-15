@@ -3,12 +3,13 @@ from django.contrib.auth.models import User
 from PIL import Image
 
 
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Имя пользователя')
-    avatar = models.ImageField(default='default_avatar.jpg', upload_to='profile_images', verbose_name="Аватарка")
+    avatar = models.ImageField(default='profile_images/default_avatar.jpg', upload_to='profile_images', verbose_name="Аватарка")
     bio = models.TextField(verbose_name="Общая информация")
     created = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
-    slug = models.SlugField(unique_for_date=created, verbose_name="Слаг")
+    slug = models.SlugField(unique_for_date='created', verbose_name="Слаг")
 
     def save(self, *args, **kwargs):
         super().save()

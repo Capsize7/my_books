@@ -4,7 +4,11 @@
 
 {% block content %}
     {% if comment %}
+        {% if comment_id %}
+        <h2>Ваш комментарий был успешно обновлен.</h2>
+        {% else %}
         <h2>Ваш комментарий был успешно добавлен.</h2>
+        {% endif %}
         <p><a href="{{ book.get_absolute_url }}">Вернуться к книге</a></p>
     {% else %}
         {% include "books/includes/comment_form.html" %}

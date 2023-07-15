@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 from django_summernote.admin import SummernoteModelAdmin
+from django.contrib.auth.models import User
 
 from .models import *
 # Register your models here.
