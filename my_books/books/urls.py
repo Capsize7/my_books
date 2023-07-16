@@ -16,7 +16,7 @@ urlpatterns = [
     path('ordering/<slug:ordering>/<str:direction>/', books_list, name='books_list_ordering'),
     path('genre/<slug:genre_slug>/ordering/<slug:ordering>/<str:direction>/', books_list, name='book_list_by_genre_ordering'),
     path('<int:book_id>/share/', book_share, name='book_share'),
+    path('<slug:book_slug>/<int:comment_id>/', book_comment_delete, name='book_comment_delete'),
     path('<slug:book_slug>/comment/', book_comment, name='book_comment'),
     path('<slug:book_slug>/comment/<int:comment_id>', book_comment, name='book_comment_edit'),
-
 ]

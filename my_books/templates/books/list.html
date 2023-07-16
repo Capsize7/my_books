@@ -1,11 +1,11 @@
 {% extends "books/base.html" %}
 {% load books_tags %}
 
-{% block title %}My Books{% endblock %}
+{% block title %}Мои книги{% endblock %}
 
 {% block content %}
     {% if not tag %}
-    <h1 align="center">Мои прочитанные книги</h1>
+    <h1 align="center">Прочитанные книги</h1>
     {% endif %}
     {% if tag %}
         <h2>Книги помеченные тегами: <i>"{{ tag.name }}"</i></h2> {% endif %}

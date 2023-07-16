@@ -11,7 +11,7 @@ from django_summernote.admin import SummernoteModelAdmin
 class BookAdmin(SummernoteModelAdmin):
     list_per_page = 5
     summernote_fields = ('description',)
-    list_display = ['title', 'author', 'book_photo', 'status', 'rating', 'published']
+    list_display = ['title', 'author', 'book_photo', 'status', 'rating', 'published',]
     list_filter = ['status', 'genre']
     search_fields = ['title', 'author']
     prepopulated_fields = {'slug': ('title',)}

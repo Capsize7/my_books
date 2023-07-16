@@ -1,16 +1,19 @@
 {% load books_tags %}
 {% load static %}
+{% load cache %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>{% block title %}{% endblock %}</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
     {% load django_bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
-
 </head>
 <body>
-<!-- Responsive navbar-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand {% if genre_slug == None and main %}text-secondary{% endif %}" href="/" onMouseOver="this.style.color='#20B2AA'" onMouseOut="this.style.color='white'" style="font-size: medium">Все книги</a>
@@ -52,12 +55,11 @@
             {% block content %}
             {% endblock %}
         </div>
-        <!-- Widgets-->
         <div class="col-lg-4">
             <div class="card mb-4">
                 <div class="card-header">Мои книги</div>
                 <div class="card-body">
-                    На данный момент я прочитал книг: {% total_books %}
+                    Количество прочитанных книг: {% total_books %}
                 </div>
             </div>
             <div class="card mb-4">
@@ -103,9 +105,11 @@
         </div>
     </div>
 </div>
+{% cache 900 footer %}
 <footer class="py-3 bg-dark mt-2">
     <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Мой сайт 2023 Powered by
         Django</p></div>
 </footer>
+{% endcache %}
 </body>
 </html>

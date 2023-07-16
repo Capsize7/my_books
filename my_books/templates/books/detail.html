@@ -1,7 +1,8 @@
 {% extends "books/base.html" %}
 {% load books_tags %}
-
+{% load cache %}
 {% block title %}{{ book.title }}{% endblock %}
+
 
 {% block content %}
     <h1 class="fw-bolder text-center" style="font-size: 2em">{{ book.title }}</h1>
@@ -79,10 +80,14 @@
                     {% endif %}
                 </p>
                 <span style="padding: 0px">{{ comment.body|safe }}</span>
-                {% if comment.author.username == user.username %}
+                {% if comment.author == user %}
                 <a class="btn btn-primary" style="float: right"
                    href="{% url 'books:book_detail_comment_edit' book=book.slug ordering=ordering comment_edit=True comment_id=comment.id %}">
                 Редактировать
+                </a>
+                <a class="btn btn-primary" style="float: left; --bs-btn-hover-bg: red"
+                   href="{% url 'books:book_comment_delete' book_slug=book.slug comment_id=comment.id %}">
+                Удалить
                 </a>
                 {% endif %}
             </div>
