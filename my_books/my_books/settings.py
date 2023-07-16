@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
     'accounts.apps.AccountsConfig',
     'social_django',
-    'django_extensions'
+    'django_extensions',
+    "debug_toolbar",
 
 ]
 
@@ -58,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = 'my_books.urls'
@@ -153,7 +155,6 @@ SOCIAL_AUTH_GITHUB_SECRET = str(os.getenv('GITHUB_SECRET'))
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = str(os.getenv('GOOGLE_KEY'))
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = str(os.getenv('GOOGLE_SECRET'))
 
-
 LOGIN_REDIRECT_URL = "/"
 
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 30
@@ -161,8 +162,19 @@ SESSION_COOKIE_AGE = 60 * 60 * 24 * 30
 SUMMERNOTE_CONFIG = {
     'summernote': {
         'fontNames': ['Serif', 'Sans', 'Arial', 'Arial Black', 'Courier', 'Courier New', 'Comic Sans MS', 'Helvetica',
-                    'Impact', 'Lucida Grande', 'Sacramento'],
+                      'Impact', 'Lucida Grande', 'Sacramento'],
         'fontNamesIgnoreCheck': ['Serif', 'Sans', 'Arial', 'Arial Black', 'Courier', 'Courier New', 'Comic Sans MS',
-                               'Helvetica', 'Impact', 'Lucida Grande', 'Sacramento'],
+                                 'Helvetica', 'Impact', 'Lucida Grande', 'Sacramento'],
+    }
+}
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": os.path.join(BASE_DIR, 'my_books_cache'),
     }
 }

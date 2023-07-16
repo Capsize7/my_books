@@ -1,33 +1,38 @@
+from django.core.cache import cache
 from django.core.mail import send_mail
 from django.core.paginator import Paginator
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from taggit.models import Tag
 from .forms import EmailPostForm, CommentForm, SearchForm
 from .models import *
 from django.db.models import Count
 from django.contrib.postgres.search import TrigramSimilarity
+from django.views.decorators.cache import cache_page
 
 
-# Create your views here.
+@cache_page(60)
 def books_list(request, tag_slug=None, genre_slug=None, ordering='rating', direction='&uarr;', author=None):
     direction_symbols = {'&darr;': '&uarr;', '&uarr;': '&darr;'}
     direction = direction_symbols[direction]
     template = 'books/list.html'
+    main = True
     if direction == '&darr;':
         if not author:
-            book_list = Book.read.all().order_by('-' + ordering).distinct()
+            book_list = Book.read.all().order_by('-' + ordering).distinct().prefetch_related('tags')
         else:
             template = 'books/list_author.html'
-            book_list = Book.read.all().filter(author=author).order_by('-' + ordering).distinct()
+            book_list = Book.read.all().filter(author=author).order_by('-' + ordering).distinct().prefetch_related(
+                'tags')
+            main = False
     else:
         if not author:
-            book_list = Book.read.all().order_by(ordering).distinct()
+            book_list = Book.read.all().order_by(ordering).distinct().prefetch_related('tags')
         else:
             template = 'books/list_author.html'
-            book_list = Book.read.all().filter(author=author).order_by(ordering).distinct()
+            book_list = Book.read.all().filter(author=author).order_by(ordering).distinct().prefetch_related('tags')
+            main = False
     tag = None
-    main = True
     if tag_slug:
         main = False
         tag = get_object_or_404(Tag, slug=tag_slug)
@@ -37,12 +42,13 @@ def books_list(request, tag_slug=None, genre_slug=None, ordering='rating', direc
         main = False
         if genre_slug == 'hochu-prochest':
             if direction == '&darr;':
-                book_list = Book.want_to_read.all().order_by('-' + ordering, 'title').distinct()
+                book_list = Book.want_to_read.all().order_by('-' + ordering, 'title').distinct().prefetch_related(
+                    'tags')
             else:
-                book_list = Book.want_to_read.all().order_by(ordering, 'title').distinct()
+                book_list = Book.want_to_read.all().order_by(ordering, 'title').distinct().prefetch_related('tags')
         else:
             genre_id = Genre.objects.get(slug=genre_slug).id
-            book_list = book_list.filter(genre_id=genre_id)
+            book_list = book_list.filter(genre_id=genre_id).prefetch_related('tags')
 
     paginator = Paginator(book_list, 3)
     page_number = request.GET.get('page', 1)
@@ -108,7 +114,16 @@ def book_comment(request, book_slug, comment_id=None):
         comment = Comment.objects.get(id=comment_id)
         comment.body = request.POST['body']
         comment.save()
-    return render(request, 'books/comment.html', {'book': book, 'form': form, 'comment': comment, 'comment_id': comment_id})
+    return render(request, 'books/comment.html',
+                  {'book': book, 'form': form, 'comment': comment, 'comment_id': comment_id})
+
+
+def book_comment_delete(request, book_slug, comment_id, delete=True):
+    comment = get_object_or_404(Comment, id=comment_id)
+    if comment.author == request.user:
+        comment.delete()
+    book = Book.read.get(slug=book_slug)
+    return render(request, 'books/comment.html', {'book': book, 'delete': delete})
 
 
 def book_search(request):
