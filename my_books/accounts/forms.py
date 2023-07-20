@@ -1,5 +1,5 @@
+from captcha.fields import CaptchaField
 from django import forms
-from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django_summernote.widgets import SummernoteWidget
 
@@ -19,6 +19,7 @@ class SignUpForm(UserCreationForm):
                                 label='Пароль')
     password2 = forms.CharField(max_length=50, widget=forms.PasswordInput(attrs={"class": "form-control mb-1"}),
                                 label='Подтвердите пароль')
+    captcha = CaptchaField(required=True, label='Капча')
 
     class Meta:
         model = User

@@ -11,7 +11,7 @@ from django.contrib.postgres.search import TrigramSimilarity
 from django.views.decorators.cache import cache_page
 
 
-@cache_page(60)
+
 def books_list(request, tag_slug=None, genre_slug=None, ordering='rating', direction='&uarr;', author=None):
     direction_symbols = {'&darr;': '&uarr;', '&uarr;': '&darr;'}
     direction = direction_symbols[direction]
@@ -57,8 +57,8 @@ def books_list(request, tag_slug=None, genre_slug=None, ordering='rating', direc
                   {'books': books, 'tag': tag, 'genre_slug': genre_slug, 'main': main, 'ordering': ordering,
                    'direction': direction, 'paginator': paginator, 'author': author})
 
-
-def book_detail(request, book, ordering='-created', read=True, comment_edit=None, comment_id=None):
+@cache_page(60)
+def book_detail(request, book, ordering='-created', comment_edit=None, comment_id=None):
     book = get_object_or_404(Book, slug=book)
     comments = book.comments.all().order_by(ordering)
     if not comment_edit:

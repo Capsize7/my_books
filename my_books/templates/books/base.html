@@ -1,7 +1,6 @@
-{% load books_tags %}
-{% load static %}
-{% load cache %}
 <!DOCTYPE html>
+{% load books_tags %}
+{% load cache %}
 <html>
 <head>
     <title>{% block title %}{% endblock %}</title>
@@ -14,7 +13,7 @@
     {% bootstrap_javascript %}
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand {% if genre_slug == None and main %}text-secondary{% endif %}" href="/" onMouseOver="this.style.color='#20B2AA'" onMouseOut="this.style.color='white'" style="font-size: medium">Все книги</a>
         {% get_genres as genres %}
@@ -39,7 +38,7 @@
         </div>
     </div>
 </nav>
-<div class="container mt-5">
+<div class="container" style="padding-top: 80px">
     <div class="row">
         <div class="col-lg-8">
             {% if messages %}

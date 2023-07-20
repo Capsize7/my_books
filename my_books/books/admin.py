@@ -11,17 +11,22 @@ from django_summernote.admin import SummernoteModelAdmin
 class BookAdmin(SummernoteModelAdmin):
     list_per_page = 5
     summernote_fields = ('description',)
-    list_display = ['title', 'author', 'book_photo', 'status', 'rating', 'published',]
+    list_display = ['title', 'author', 'book_photo', 'status', 'rating', 'published', ]
     list_filter = ['status', 'genre']
     search_fields = ['title', 'author']
     prepopulated_fields = {'slug': ('title',)}
     date_hierarchy = 'published'
     ordering = ['-published']
     list_editable = ('status', 'rating')
+    fields = (
+    'title', 'slug', 'author', 'photo', 'book_photo', 'status', 'description', 'rating', 'published', 'written', 'genre', 'tags')
+    readonly_fields = ('published', 'book_photo')
 
     def book_photo(self, object):
         if object.photo:
             return mark_safe(f"<img src='{object.photo.url}' width=70>")
+
+    book_photo.short_description = 'Обложка'
 
 
 @admin.register(Comment)
@@ -39,5 +44,3 @@ class GenreAdmin(admin.ModelAdmin):
     list_filter = ['name']
     search_fields = ['name']
     prepopulated_fields = {'slug': ('name',)}
-
-
