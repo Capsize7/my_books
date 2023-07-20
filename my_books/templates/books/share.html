@@ -1,17 +1,16 @@
 {% extends "books/base.html" %}
-
-{% block title %}Share a post{% endblock %}
-
+{% block title %}Поделиться книгой{% endblock %}
 {% block content %}
     {% if sent %}
         <h1>E-mail был успешно отправлен</h1>
         <p>
             Книга "{{ book.title }}" была успешно отправлена
-            нв адрес - {{ form.cleaned_data.to }}
+            на адрес - {{ form.cleaned_data.to }}
         </p>
     {% else %}
     <h1 align="center">Поделиться книгой <i>"{{ book.title }}"</i></h1><br>
         <form method="post">
+            {% csrf_token %}
              {% for field in form %}
                  <div>
                     {{ field.errors }}
@@ -19,8 +18,8 @@
                      {{ field }}
                 </div>
             {% endfor %}
-            {% csrf_token %}
-            <input type="submit" value="Отправить" class="btn btn-primary mb-3 btn-lg">
+            <script type="text/javascript" src="{% static 'scripts/captcha.js' %}"></script>
+            <br><input type="submit" value="Отправить" class="btn btn-primary mb-3 btn-lg">
         </form>
     {% endif %}
 {% endblock %}

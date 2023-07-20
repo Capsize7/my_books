@@ -36,4 +36,5 @@ urlpatterns = [
                   path("accounts/", include("django.contrib.auth.urls")),
                   re_path(r'^oauth/', include('social_django.urls', namespace='social')),
                   path("__debug__/", include("debug_toolbar.urls")),
+                  path('captcha/', include('captcha.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
