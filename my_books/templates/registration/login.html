@@ -1,18 +1,22 @@
 {% extends "books/base.html" %}
 {% block title %} Login {% endblock %}
 {% block content %}
+   <p id="warn" style="display:none; color:red; text-align:center; font-size: large">
+      Предупреждение: CapsLock включен!
+   </p>
     <h2> Логин </h2>
     <a href="{% url 'accounts:signup' %}"  class="btn btn-link btn-lg active btn-block">Зарегистрироваться</a>
     <a href="{% url 'social:begin' 'github' %}"  class="btn btn-link btn-lg active btn-block">Войти через GitHub</a>
     <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-link btn-lg active btn-block">Войти через Google</a>
     <form method="post" class="form">
-        {% for field in form%}
+        {% for field in form %}
             <div>
                 {{ field.errors }}
                 {{ field.label_tag }}
                 {{ field }}
             </div>
         {% endfor %}
+        <script type="text/javascript" src="{% static 'scripts/CapsLock.js' %}"></script>
         {% csrf_token %}
         <br><input type="submit" class="btn btn-primary btn-lg" value="Войти">
     </form>

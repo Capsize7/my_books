@@ -2,6 +2,9 @@
 {% block title %} Sign Up {% endblock %}
 {% block content %}
     <h2>Регистрация</h2>
+   <p id="warn" style="display:none; color:red; text-align:center; font-size: large">
+      Предупреждение: CapsLock включен!
+   </p>
     {% if form.errors %}
         <div class="container d-flex align-items-center justify-content-center">
             <div class="alert alert-warning alert-dismissible fade show w-50  d-block" role="alert">
@@ -20,6 +23,7 @@
                 {{ field }}
             </div>
         {% endfor %}
+        <script type="text/javascript" src="{% static 'scripts/CapsLock.js' %}"></script>
         <script type="text/javascript" src="{% static 'scripts/captcha.js' %}"></script>
         {% csrf_token %}
         <br><button type="submit" class="btn btn-primary btn-lg">Зарегистрироваться</button>

@@ -1,4 +1,4 @@
-# Django 4.0+ project template
+# Django 4.0+ My Books
 
 This is a simple Django 4.0+ project that describes my read books. Accordingly it, I tried to apply my knowledge and skills. Most points can be improved, which I will do. Some solutions have been added to demonstrate understanding of the work, and to try to better understand the some features of exploring theme. Do not be so strict :)
  
