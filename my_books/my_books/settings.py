@@ -52,16 +52,29 @@ INSTALLED_APPS = [
     "rest_framework",
     'books_api.apps.BooksApiConfig',
     'django_filters',
+    'rest_framework.authtoken',
+    'drf_spectacular',
 
 ]
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny",
+        "rest_framework.permissions.IsAuthenticated",
     ],
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 5
+    'PAGE_SIZE': 5,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        "rest_framework.authentication.TokenAuthentication",
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Books API Project",
+    "DESCRIPTION": "A sample project to learn about DRF",
+    "VERSION": "1.0.0",
 }
 
 MIDDLEWARE = [
