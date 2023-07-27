@@ -15,12 +15,14 @@ class BookSerializer(serializers.ModelSerializer):
         model = Book
 
 class CommentSerializer(serializers.ModelSerializer):
+    author = serializers.HiddenField(default=serializers.CurrentUserDefault())
     class Meta:
         fields = (
             'id',
             'book',
+            'body',
             'author',
-            'created'
+            'created',
         )
 
         model = Comment

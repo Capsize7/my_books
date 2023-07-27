@@ -19,16 +19,22 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
 from django.urls import path, include, re_path
+from rest_framework import routers
 
 from books.sitemaps import BooksSitemap
+from books_api.views import CommentViewSet
 
 sitemaps = {
     'books': BooksSitemap,
 }
 
+router = routers.SimpleRouter()
+router.register(r'', CommentViewSet, basename='comment')
+
 urlpatterns = [
                   path('admin/', admin.site.urls),
                   path("api/v1/", include("books_api.urls")),
+                  path("api/v1/comment/", include(router.urls)),
                   path("api-auth/", include("rest_framework.urls")),
                   path('', include('books.urls'), name='books'),
                   path('summernote/', include('django_summernote.urls')),

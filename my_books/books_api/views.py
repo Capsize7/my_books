@@ -1,8 +1,12 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import generics, filters
+from rest_framework import generics, filters, viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
 from books.models import Book, Comment
 from .serializers import BookSerializer, CommentSerializer
 from .permissions import IsAuthorOrReadOnly
+
 
 class BookList(generics.ListCreateAPIView):
     queryset = Book.objects.all()
@@ -21,17 +25,19 @@ class BookDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = IsAuthorOrReadOnly,
 
 
-class CommentList(generics.ListCreateAPIView):
-    queryset = Comment.objects.all()
+class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = (IsAuthorOrReadOnly,)
-
 
     def get_queryset(self):
-        user = self.request.user
-        return Comment.objects.filter(author=user)
+        pk = self.kwargs.get('pk')
 
-class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsAuthorOrReadOnly,)
-    queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
+        if not pk:
+            user = self.request.user
+            return Comment.objects.filter(author=user)
+        return Comment.objects.filter(pk=pk)
+
+    @action(methods=['get'], detail=False)
+    def amount_comments(self, request):
+        amount = Comment.objects.all().count()
+        return Response({'amount_comments': amount})
