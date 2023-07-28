@@ -4,9 +4,9 @@ info:
   version: 1.0.0
   description: A sample project to learn about DRF
 paths:
-  /api/:
+  /api/v1/books/:
     get:
-      operationId: api_list
+      operationId: api_v1_books_list
       parameters:
       - name: ordering
         required: false
@@ -50,7 +50,7 @@ paths:
                 $ref: '#/components/schemas/PaginatedBookList'
           description: ''
     post:
-      operationId: api_create
+      operationId: api_v1_books_create
       tags:
       - api
       requestBody:
@@ -75,9 +75,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Book'
           description: ''
-  /api/{id}/:
+  /api/v1/books/{id}/:
     get:
-      operationId: api_retrieve
+      operationId: api_v1_books_retrieve
       parameters:
       - in: path
         name: id
@@ -97,7 +97,7 @@ paths:
                 $ref: '#/components/schemas/Book'
           description: ''
     put:
-      operationId: api_update
+      operationId: api_v1_books_update
       parameters:
       - in: path
         name: id
@@ -129,7 +129,7 @@ paths:
                 $ref: '#/components/schemas/Book'
           description: ''
     patch:
-      operationId: api_partial_update
+      operationId: api_v1_books_partial_update
       parameters:
       - in: path
         name: id
@@ -160,7 +160,7 @@ paths:
                 $ref: '#/components/schemas/Book'
           description: ''
     delete:
-      operationId: api_destroy
+      operationId: api_v1_books_destroy
       parameters:
       - in: path
         name: id
@@ -175,9 +175,9 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/comment/:
+  /api/v1/comment/:
     get:
-      operationId: api_comment_list
+      operationId: api_v1_comment_list
       parameters:
       - name: page
         required: false
@@ -198,7 +198,7 @@ paths:
                 $ref: '#/components/schemas/PaginatedCommentList'
           description: ''
     post:
-      operationId: api_comment_create
+      operationId: api_v1_comment_create
       tags:
       - api
       requestBody:
@@ -223,14 +223,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/Comment'
           description: ''
-  /api/comment/{id}/:
+  /api/v1/comment/{id}/:
     get:
-      operationId: api_comment_retrieve
+      operationId: api_v1_comment_retrieve
       parameters:
       - in: path
         name: id
         schema:
-          type: integer
+          type: string
         required: true
       tags:
       - api
@@ -245,12 +245,12 @@ paths:
                 $ref: '#/components/schemas/Comment'
           description: ''
     put:
-      operationId: api_comment_update
+      operationId: api_v1_comment_update
       parameters:
       - in: path
         name: id
         schema:
-          type: integer
+          type: string
         required: true
       tags:
       - api
@@ -277,12 +277,12 @@ paths:
                 $ref: '#/components/schemas/Comment'
           description: ''
     patch:
-      operationId: api_comment_partial_update
+      operationId: api_v1_comment_partial_update
       parameters:
       - in: path
         name: id
         schema:
-          type: integer
+          type: string
         required: true
       tags:
       - api
@@ -308,12 +308,12 @@ paths:
                 $ref: '#/components/schemas/Comment'
           description: ''
     delete:
-      operationId: api_comment_destroy
+      operationId: api_v1_comment_destroy
       parameters:
       - in: path
         name: id
         schema:
-          type: integer
+          type: string
         required: true
       tags:
       - api
@@ -323,6 +323,166 @@ paths:
       responses:
         '204':
           description: No response body
+  /api/v1/comment/amount_comments/:
+    get:
+      operationId: api_v1_comment_amount_comments_retrieve
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+          description: ''
+  /api/v1/schema/:
+    get:
+      operationId: api_v1_schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - ckb
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
 components:
   schemas:
     Book:
@@ -368,16 +528,16 @@ components:
         book:
           type: integer
           title: Книга
-        author:
-          type: integer
-          title: Автор
+        body:
+          type: string
+          title: Содержание
         created:
           type: string
           format: date-time
           readOnly: true
           title: Дата создания
       required:
-      - author
+      - body
       - book
       - created
       - id
@@ -457,9 +617,9 @@ components:
         book:
           type: integer
           title: Книга
-        author:
-          type: integer
-          title: Автор
+        body:
+          type: string
+          title: Содержание
         created:
           type: string
           format: date-time
