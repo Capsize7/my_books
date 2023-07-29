@@ -8,7 +8,18 @@
     <a href="{% url 'accounts:signup' %}"  class="btn btn-link btn-lg active btn-block">Зарегистрироваться</a>
     <a href="{% url 'social:begin' 'github' %}"  class="btn btn-link btn-lg active btn-block">Войти через GitHub</a>
     <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-link btn-lg active btn-block">Войти через Google</a>
+    {% if form.errors %}
+        <div class="container d-flex align-items-center justify-content-center">
+            <div class="alert alert-warning alert-dismissible fade show w-50  d-block" role="alert">
+                {% for key, value in form.errors.items %}
+                    <strong>{{ value }}</strong>
+                {% endfor %}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    {% endif %}
     <form method="post" class="form">
+        {% csrf_token %}
         {% for field in form %}
             <div>
                 {{ field.errors }}
@@ -17,7 +28,6 @@
             </div>
         {% endfor %}
         <script type="text/javascript" src="{% static 'scripts/CapsLock.js' %}"></script>
-        {% csrf_token %}
         <br><input type="submit" class="btn btn-primary btn-lg" value="Войти">
     </form>
    <br><a href="{% url 'password_reset' %}">Сбросить пароль</a>
