@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 {% load books_tags %}
 {% load cache %}
-<html>
+<html style="min-height: 100vh;
+  overflow: auto;">
 <head>
     <title>{% block title %}{% endblock %}</title>
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png' %}">
@@ -12,7 +13,8 @@
     {% bootstrap_css %}
     {% bootstrap_javascript %}
 </head>
-<body>
+<body style="min-height: 100vh;
+  overflow: auto;">
 <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand {% if genre_slug == None and main %}text-secondary{% endif %}" href="/" onMouseOver="this.style.color='#20B2AA'" onMouseOut="this.style.color='white'" style="font-size: medium">Все книги</a>
@@ -38,7 +40,7 @@
         </div>
     </div>
 </nav>
-<div class="container" style="padding-top: 80px">
+<div class="container" style="padding-top: 6rem; min-height: 100vh;">
     <div class="row">
         <div class="col-lg-8">
             {% if messages %}
@@ -104,11 +106,9 @@
         </div>
     </div>
 </div>
-{% cache 900 footer %}
 <footer class="py-3 bg-dark mt-2">
     <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Мой сайт 2023 Powered by
         Django</p></div>
 </footer>
-{% endcache %}
 </body>
 </html>

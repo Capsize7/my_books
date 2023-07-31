@@ -120,7 +120,7 @@ def book_comment_delete(request, book_slug, comment_id, delete=True):
     comment = get_object_or_404(Comment, id=comment_id)
     if comment.author == request.user:
         comment.delete()
-    book = Book.read.get(slug=book_slug)
+    book = get_object_or_404(Book, slug=book_slug)
     return render(request, 'books/comment.html', {'book': book, 'delete': delete})
 
 
