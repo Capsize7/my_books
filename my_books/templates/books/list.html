@@ -39,6 +39,9 @@
         </section>
     </div>
     {% endfor %}
-<div class="container">{% include 'books/pagination.html' with page=books %}</div>
 {% endblock %}
+{% block pagin%}
+{% include 'books/pagination.html' with page=books %}
+{% endblock %}
+
 
