@@ -16,10 +16,13 @@ This is my project powered by Django 4.0+ about my read books. Accordingly it, I
 
 ## How to install
 ```
-git clone https://github.com/Capsize7/my_books
-pip install -r requirements.txt
-There is a .env file with some keys.
-
+git clone https://github.com/Capsize7/my_books # in the terminal
+pip install -r requirements.txt # in the terminal
+There is a '.env' file with some keys which you should replace on your correct data
+Set up the database (for example postgreSQL with name of db 'books', user 'books' and password '1')
+python manage.py makemigrations # in the terminal
+python manage.py migrate # in the terminal
+python manage.py test books.tests # in the terminal to check that all tests is passing
 ```
 
 ## License
